@@ -1,6 +1,6 @@
 import pickle
 # import trained model
-# import image feature vectors thing
+import image_vector as iv
 
 def load_db():
     """
@@ -42,7 +42,7 @@ def add_image(image_id):
     
     """
     database = load_db("database.p")
-    image_vector = get_vector(image_id)
-    semantic_embeddings = get_embeddings(image_id)
-    database[image_vector] = (image_id, semantic_embeddings)
+    image_vector = iv.get_resnet_vector(image_id)
+    semantic_embeddings = get_embeddings(image_id) #after training
+    database[tuple(image_vector)] = (image_id, semantic_embeddings)
     save_db(database, "database.p")
