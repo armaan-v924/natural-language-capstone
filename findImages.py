@@ -41,9 +41,9 @@ def find_topk_images(k, embed_query, database):
     '''
     distances = []
     for feature, embedded in database.items():
-        distances.append((cos_distance(embed_query,embedded), feature))
+        distances.append((cos_distance(embed_query,embedded[1]), feature, embedded[0]))
     top_images = sorted(distances, reverse=True)[:k]
-    top_featurevecs = list(zip(*top_images))[1]
+    return [image[2] for image in top_images]
 
 def display_images(image_ids):
     '''
