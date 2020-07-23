@@ -1,6 +1,7 @@
 import json
 import numpy as np
-
+import text_embedding
+from gensim.models.keyedvectors import KeyedVectors
 
 class Mappings:
     def __init__(self, json_path = r"./dat/captions_train2014.json"):
@@ -111,16 +112,20 @@ class Mappings:
         caption_dict = next((dic for i, dic in enumerate(self.data["annotations"]) if self.data["annotations"][i]["id"] == captionID), None)
         return caption_dict["caption"] if caption_dict is not None else 'None'
 
-    def get_capID_vector(self, captionID):
+    def get_capID_vector(self, captionID, glove_path = r"./dat/glove.6B.50d.txt.w2v"):
         """Returns unit vector given caption ID
 
         Parameters:
         -----------
         captionID: int
+        glove_path (Optional): str
+                               Default: ./dat/glove.6B.50d.txt.w2v
 
         Returns: 
         --------
         unit_vector: np.array(50,)
         """
         caption = self.get_caption_capID(captionID)
+        return text_embedding.text_embed(caption, KeyedVectors.load_word2vec_format(glove_path, binary=False))
+
         
