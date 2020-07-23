@@ -1,6 +1,6 @@
 import pickle
 
-def load_resnet(resnet_path=None):
+def load_resnet(resnet_path="resnet18_features.pkl"):
     """
     Has to be run at least once before calling get_resnet_vector
     
@@ -15,9 +15,6 @@ def load_resnet(resnet_path=None):
     database: dictionary mapping image IDs to image feature vectors
     
     """
-    if resnet_path is None:
-        resnet_path = "resnet18_features.pkl"
-
     with open(resnet_path, mode="rb") as opened_file:
         resnet = pickle.load(opened_file)
     
