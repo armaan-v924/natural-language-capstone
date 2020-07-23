@@ -1,10 +1,16 @@
 import json
 import numpy as np
 
-class Mappings:
-    def __init__(self, json_path):
-        """
 
+class Mappings:
+    def __init__(self, json_path = r"./dat/captions_train2014.json"):
+        """Set of convenience functions to pull information from dataset easily
+
+        Parameters:
+        -----------
+        json_path (Optional): str
+                              Path to json file containing dataset information
+                              Default: "./dat/captions_train2014.json"
         """
         with open(json_path) as json_file:
             self.data = json.load(json_file)
@@ -24,7 +30,7 @@ class Mappings:
 
         return [i["id"] for i in self.data["images"]]
                           
-    def get_imageID(self, captionID):
+    def get_imageID_capID(self, captionID):
         """Return Image ID corresponding to given caption ID
         
         Parameters:
@@ -33,11 +39,11 @@ class Mappings:
         
         Returns:
         --------
-        imageID: int
+        imageID: int  
                  Will return 0 if caption ID is not found
         """
 
-        cap_dict = next((i for i in self.data["annotations"] if self.data["annotations"][i]["id"] == captionID), None)
+        cap_dict = next((dic for i, dic in enumerate(self.data["annotations"]) if self.data["annotations"][i]["id"] == captionID), None)
 
         if cap_dict is None:
             return 0
@@ -45,7 +51,7 @@ class Mappings:
             return cap_dict["image_id"]
 
 
-    def get_captionIDs(self, imageID):
+    def get_captionIDs_imgID(self, imageID):
         """Return caption IDs corresponding to given image ID
         
         Parameters:
@@ -58,11 +64,10 @@ class Mappings:
                     Will return [0] if image ID is not found
         """
 
-        caption_dicts = next((i for i in self.data["annotations"] if self.data["annotations"][i]["image_id"] == imageID), None)
-        
-        pass
+        caption_dicts = [dic for i, dic in enumerate(self.data["annotations"]) if self.data["annotations"][i]["image_id"] == imageID]
+        return [j["id"] for j in caption_dicts] if caption_dicts is not None else [0]
 
-    def get_captions(self, imageID):
+    def get_captions_imgID(self, imageID):
         """Return captions corresponding to given image ID
 
         Parameters:
@@ -73,7 +78,8 @@ class Mappings:
         --------
         captions: List[str]
         """
-        pass
+        caption_dicts = [dic for i, dic in enumerate(self.data["annotations"]) if self.data["annotations"][i]["image_id"] == imageID]
+        return [j["caption"] for j in caption_dicts] if caption_dicts is not None else [0]
 
     def get_imageURL(self, imageID):
         """Returns image URLs for given image ID
@@ -84,11 +90,28 @@ class Mappings:
 
         Returns:
         --------
-        URLs: List[str]
+        URLs: str
+              Returns 'None' if image ID is not found
         """
-        pass
+        img_dict = next((dic for i, dic in enumerate(self.data["images"]) if self.data["images"][i]["id"] == imageID), None)
+        return img_dict["coco_url"] if img_dict is not None else 'None'
 
-    def get_cap_vector(self, captionID):
+    def get_caption_capID(self, captionID):
+        """Returns caption for given caption ID
+        
+        Parameters:
+        -----------
+        captionID: int
+
+        Returns:
+        --------
+        caption: str
+
+        """
+        caption_dict = next((dic for i, dic in enumerate(self.data["annotations"]) if self.data["annotations"][i]["id"] == captionID), None)
+        return caption_dict["caption"] if caption_dict is not None else 'None'
+
+    def get_capID_vector(self, captionID):
         """Returns unit vector given caption ID
 
         Parameters:
@@ -99,5 +122,5 @@ class Mappings:
         --------
         unit_vector: np.array(50,)
         """
-        pass
-    
+        caption = self.get_caption_capID(captionID)
+        
