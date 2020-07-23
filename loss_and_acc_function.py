@@ -15,7 +15,10 @@ ranking loss.
         loss: max(0, margin-(sgood-sbad))
     """
     margin = 0.1
-    return mg.max(0,margin-(sgood-sbad))
+    if sgood > sbad - margin:
+        return mg.nnet.losses.margin_ranking_loss(sgood, sbad, 1, margin, constant=False)
+    else:
+        return mg.nnet.losses.margin_ranking_loss(sgood, sbad, -1, margin, constant=False)
 def acc(prediction,truth):
     """Calculates the accuracy of the predicted models over the truth.
 
@@ -28,4 +31,4 @@ def acc(prediction,truth):
     ---------
         mean
     """
-    return mg.mean(np.argmax(prediction,axis=1) == truth)
+    return mg.mean(mg.argmax(prediction,axis=1) == truth)
