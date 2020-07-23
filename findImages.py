@@ -1,6 +1,6 @@
 import json
 import matplotlib.pyplot as plt
-import Mappings from mappings
+from mappings import Mappings
 import numpy as np
 
 import urllib.request as req
@@ -57,9 +57,10 @@ def display_images(image_ids):
     --------
     None; but displays images of closest matches to caption
     '''
+    maps = Mappings()
     fig, ax = plt.subplot(len(image_ids),1)
     for i in range(len(image_ids)):
-        img_url = Mappings.get_imageURL(image_ids[i])
+        img_url = maps.get_imageURL(image_ids[i])
         a = plt.imread(img_url)
         ax[i].imshow(a)
     ax.show()
