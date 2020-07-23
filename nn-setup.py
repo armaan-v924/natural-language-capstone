@@ -58,29 +58,33 @@ def sample_data(full_dataset):
     Tuple(np.ndarray, np.ndarray)
     Training data (80% of given dataset), Testing data (20% of given dataset)
     Each np.ndarray is shape (num_datapoints, 3) where the 3 columns are good image IDs,
-    good caption IDs, bad caption IDs
+    good caption IDs, bad image IDs
     '''
-    all_cap = full_dataset.all_captionID()    
+    all_cap = full_dataset.all_captionID()
     all_bad = np.array([])
     all_img = np.array([])
     total_cap = len(all_cap)    
 
     for i in range(0, total_cap):
-        possible = np.random.randint(0, total_cap, size=(25,))
-        good_img = full_dataset.get_imageID(all_cap[i*10])
-        good_w = full_dataset.get_cap_vector(all_cap[i*10])
-        
-        diff = np.array([])
-        for p in possible:
-            bad_img = full_dataset.get_imageID(p)
-            if bad_img != good_img:
-                bad_w = full_dataset.get_cap_vector(p)
-                diff = np.append(diff, np.dot(bad_w, good_w))
-            else:
-                diff = np.append(diff, 0)
+        worst = np.array([])
+        good_img_id = full_dataset.get_imageID(all_cap[i])
+        good_w = full_dataset.get_cap_vector(all_cap[i])
+
+        for j in range(10):
+            possible = np.random.randint(0, total_cap, size=(25,))
+
+            bad_img = np.array([])
+            diff = []
+            for p in possible:
+                bad_img_id = full_dataset.get_imageID(p)
+                bad_img = np.append(bad_img, bad_img_id)
+                if bad_img_id != good_img_id:
+                    bad_w = full_dataset.get_cap_vector(p)
+                    diff.append(np.dot(bad_w, good_w))
+                else:
+                    diff.append(0)
                 
-        diff = np.argsort(diff)
-        worst = possible[diff[-10:]]
+            worst = np.append(worst, bad_img[diff.index(max(diff))])
 
         all_bad = np.append(all_bad, worst)
         all_img = np.append(all_img, good_img)
