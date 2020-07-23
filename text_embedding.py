@@ -2,7 +2,7 @@ from nltk.tokenize import word_tokenize
 import string
 from gensim.models.keyedvectors import KeyedVectors
 import numpy as np
-import Mappings
+from mappings import Mappings
 
 def text_embed(text, glove):
     """
@@ -26,7 +26,7 @@ def text_embed(text, glove):
     #for IDFs - set up counter for words across all documents
     
     mappings = Mappings()
-    all_captions = mappings.captions
+    all_captions = mappings.all_captions()
     N = len(all_captions)
     
     #join all captions, lowercase, no punctuation, split by space
