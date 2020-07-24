@@ -13,7 +13,6 @@ embedded_caption = text_embedding.text_embed(caption, glove)
 
 #dot product with database to find similarity scores
 database = database_functions.load_db()
-similarity_scores = embedded_caption @ database
 
 #find top k scores (for n images to display) and their images
 k = 4
