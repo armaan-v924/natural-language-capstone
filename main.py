@@ -17,7 +17,6 @@ database = database_functions.load_db()
 
 #find top k scores (for n images to display) and their images
 k = 4
-load_model("train_parameters.npc")
 image_ids = findImages.find_topk_images(k, embedded_caption, database)
 
 #display images
