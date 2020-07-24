@@ -56,7 +56,7 @@ class Model():
                 param.data[:] = array
 
 
-def sample_data(full_dataset, resnet):
+def sample_data(full_dataset, resnet, glove):
     '''Creates training set and testing set given the full class of data/Mappings
             
     Parameters
@@ -78,12 +78,11 @@ def sample_data(full_dataset, resnet):
     total_cap = len(all_cap)   
 
     to_rem = [] 
-
     for i in range(0, total_cap):
         worst = np.array([])
         good_img_id = full_dataset.get_imageID_capID(all_cap[i])
-        if iv.get_resnet_vector(good_img_id, resnet) != 0:
-            good_w = full_dataset.get_capID_vector(all_cap[i])
+        if isinstance(iv.get_resnet_vector(good_img_id, resnet), np.ndarray):
+            good_w = full_dataset.get_capID_vector(all_cap[i], glove)
 
             for j in range(10):
                 possible = np.random.randint(0, total_cap, size=(25,))
@@ -93,20 +92,18 @@ def sample_data(full_dataset, resnet):
                 for p in possible:
                     bad_img_id = full_dataset.get_imageID_capID(all_cap[p])
                     bad_img = np.append(bad_img, bad_img_id)
-                    if iv.get_resnet_vector(bad_img_id, resnet) != 0 and bad_img_id != good_img_id:
-                            bad_w = full_dataset.get_capID_vector(all_cap[p])
+                    if isinstance(iv.get_resnet_vector(bad_img_id, resnet), np.ndarray) and bad_img_id != good_img_id:
+                            bad_w = full_dataset.get_capID_vector(all_cap[p], glove)
                             diff.append(np.dot(bad_w, good_w))
                     else:
                         diff.append(0)
                     
                 worst = np.append(worst, bad_img[diff.index(max(diff))])
-            
             all_bad = np.append(all_bad, worst)
             all_img = np.append(all_img, good_img_id)
 
         else:
             to_rem.append(i)
-
     for i in to_rem:
         del all_cap[i]
 
