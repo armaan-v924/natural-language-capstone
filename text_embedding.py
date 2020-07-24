@@ -1,4 +1,3 @@
-from nltk.tokenize import word_tokenize
 import string
 from gensim.models.keyedvectors import KeyedVectors
 import numpy as np
@@ -20,27 +19,16 @@ def text_embed(text, glove, all_captions, all_captions_tokens, idfs):
     """
 
     #remove punctuation, all lowercase, split by space
-    text = text.lower()
-    for p in string.punctuation:
-        text = text.replace(p, "")
-    tokens = word_tokenize(text)
-    
-    #for IDFs - set up counter for words across all documents
-    N = len(all_captions)
-    
-    #set up counter
-    c = Counter(all_captions_tokens)
+    text = get_words(text)
     
     #generate Glove-50 embeddings for all words in text, shape: (len(tokens), 50)
     embedded_text = np.zeros((len(tokens), 50))
     for word_idx in range(len(tokens)):
-        nt = c[tokens[word_idx]] #num times word appears across all documents
-        idf = idfs[tokens[word_idx]]
         try:
+            idf = idfs[tokens[word_idx]]
             embedded_text[word_idx] = idf * glove[tokens[word_idx]]
         except KeyError:
-            embedded_text = np.zeros((len(tokens), 50))
-            break
+            continue
     
     #sum embeddings across all words in the text, shape: (50,)
     embedded_text = np.sum(embedded_text, axis=0)
