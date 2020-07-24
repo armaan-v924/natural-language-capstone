@@ -56,7 +56,7 @@ class Model():
                 param.data[:] = array
 
 
-def sample_data(full_dataset, resnet_path):
+def sample_data(full_dataset, resnet):
     '''Creates training set and testing set given the full class of data/Mappings
             
     Parameters
@@ -72,7 +72,6 @@ def sample_data(full_dataset, resnet_path):
     Each np.ndarray is shape (num_datapoints, 3) where the 3 columns are good image IDs,
     good caption IDs, bad image IDs
     '''
-    res = iv.load_resnet(resnet_path)
     all_cap = full_dataset.all_captionID()
     all_bad = np.array([])
     all_img = np.array([])
@@ -83,7 +82,7 @@ def sample_data(full_dataset, resnet_path):
     for i in range(0, total_cap):
         worst = np.array([])
         good_img_id = full_dataset.get_imageID_capID(all_cap[i])
-        if iv.get_resnet_vector(good_img_id, res) != 0:
+        if iv.get_resnet_vector(good_img_id, resnet) != 0:
             good_w = full_dataset.get_capID_vector(all_cap[i])
 
             for j in range(10):
@@ -94,7 +93,7 @@ def sample_data(full_dataset, resnet_path):
                 for p in possible:
                     bad_img_id = full_dataset.get_imageID_capID(all_cap[p])
                     bad_img = np.append(bad_img, bad_img_id)
-                    if iv.get_resnet_vector(bad_img_id, res) != 0 and bad_img_id != good_img_id:
+                    if iv.get_resnet_vector(bad_img_id, resnet) != 0 and bad_img_id != good_img_id:
                             bad_w = full_dataset.get_capID_vector(all_cap[p])
                             diff.append(np.dot(bad_w, good_w))
                     else:
@@ -110,7 +109,7 @@ def sample_data(full_dataset, resnet_path):
 
     for i in to_rem:
         del all_cap[i]
-             
+
     all_cap = np.repeat(all_cap, 10)
     all_img = np.repeat(all_img, 10)
     test_num = int(len(all_cap)*(1/5))
