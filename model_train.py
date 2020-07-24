@@ -19,6 +19,7 @@ optim = SGD(model.parameters, learning_rate=0.001)
 
 plot_rate = 100
 map = Mappings()
+caption_tokens = te.get_all_captions_tokens(map.captions)
 batch_size = 32
 resnet = iv.load_resnet()
 train_data, test_data = nn.sample_data(map, resnet, glove)
@@ -34,7 +35,7 @@ for epoch_rate in range(10000):
         for x in batch:
             dgoodtemp = iv.get_resnet_vector(x[0],resnet)
             dbadtemp = iv.get_resnet_vector(x[2],resnet)
-            wcaptiontemp = te.text_embed(x[1],glove, map.captions, te.get_all_captions_tokens(map.captions))
+            wcaptiontemp = te.text_embed(x[1],glove, map.captions, caption_tokens)
 
             dgood.append(dgoodtemp)
             dbad.append(dbadtemp)

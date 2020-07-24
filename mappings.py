@@ -114,7 +114,7 @@ class Mappings:
     #     caption_dict = next((dic for i, dic in enumerate(self.data["annotations"]) if self.data["annotations"][i]["id"] == captionID), None)
     #     return caption_dict["caption"] if caption_dict is not None else 'None'
 
-    def get_capID_vector(self, captionID, glove):
+    def get_capID_vector(self, captionID, glove, caption_tokens):
         import text_embedding
         """Returns unit vector given caption ID
 
@@ -122,13 +122,14 @@ class Mappings:
         -----------
         captionID: int
         glove_path: loaded glove file
+        caption_tokens: all captions tokenized
 
         Returns: 
         --------
         unit_vector: np.array(50,)
         """
         caption = self.id2caption[captionID]
-        return text_embedding.text_embed(caption, glove, self.captions, text_embedding.get_all_captions_tokens(self.captions))       
+        return text_embedding.text_embed(caption, glove, self.captions, caption_tokens)       
 
 
 # # Testing
