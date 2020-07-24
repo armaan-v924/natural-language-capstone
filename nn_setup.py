@@ -72,7 +72,7 @@ def sample_data(full_dataset, resnet, glove):
     Each np.ndarray is shape (num_datapoints, 3) where the 3 columns are good image IDs,
     good caption IDs, bad image IDs
     '''
-    all_cap = full_dataset.all_captionID()
+    all_cap = full_dataset.captions
     all_bad = np.array([])
     all_img = np.array([])
     total_cap = len(all_cap)   
@@ -80,7 +80,8 @@ def sample_data(full_dataset, resnet, glove):
     to_rem = [] 
     for i in range(0, total_cap):
         worst = np.array([])
-        good_img_id = full_dataset.get_imageID_capID(all_cap[i])
+        good_img_id = full_dataset.capID2img[all_cap[i]]
+        print("g"+str(good_img_id))
         if isinstance(iv.get_resnet_vector(good_img_id, resnet), np.ndarray):
             good_w = full_dataset.get_capID_vector(all_cap[i], glove)
 
@@ -90,7 +91,7 @@ def sample_data(full_dataset, resnet, glove):
                 bad_img = np.array([])
                 diff = []
                 for p in possible:
-                    bad_img_id = full_dataset.get_imageID_capID(all_cap[p])
+                    bad_img_id = full_dataset.capID2img[all_cap[p]]
                     bad_img = np.append(bad_img, bad_img_id)
                     if isinstance(iv.get_resnet_vector(bad_img_id, resnet), np.ndarray) and bad_img_id != good_img_id:
                             bad_w = full_dataset.get_capID_vector(all_cap[p], glove)

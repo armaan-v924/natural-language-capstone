@@ -14,7 +14,7 @@ print("What would you like to do?")
 function = input("1. Update the database\n2. Find an image via caption\n")
 if function == '1':
     mapping = Mappings()
-    ids = mapping.all_imageID()
+    ids = mapping.captions()
     database_functions.add_images(ids, "trained_parameters.npz")
 elif function == '2':
     #ask for image caption and embed
