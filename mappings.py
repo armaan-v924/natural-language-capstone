@@ -44,7 +44,7 @@ class Mappings:
         """
 
         cap_dict = next((dic for i, dic in enumerate(self.data["annotations"]) if self.data["annotations"][i]["id"] == captionID), None)
-        return cap_dict["image_id"] if cap_dict is None else 0
+        return cap_dict["image_id"] if cap_dict is not None else 0
 
 
     def get_captionIDs_imgID(self, imageID):
