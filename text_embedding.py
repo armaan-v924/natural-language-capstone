@@ -35,7 +35,11 @@ def text_embed(text, glove, all_captions, all_captions_tokens):
     for word_idx in range(len(tokens)):
         nt = c[tokens[word_idx]] #num times word appears across all documents
         idf = np.log10(N / nt)
-        embedded_text[word_idx] = idf * glove[tokens[word_idx]]
+        try:
+            embedded_text[word_idx] = idf * glove[tokens[word_idx]]
+        except KeyError:
+            embedded_text = np.zeros(len(tokens), 50)
+            break
     
     #sum embeddings across all words in the text, shape: (50,)
     embedded_text = np.sum(embedded_text, axis=0)
