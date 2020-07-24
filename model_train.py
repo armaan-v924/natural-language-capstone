@@ -19,7 +19,7 @@ optim = SGD(model.parameters, learning_rate=0.001)
 
 plot_rate = 100
 map = Mappings()
-train_data, test_data = nn.sample_data(model)
+train_data, test_data = nn.sample_data(map)
 batch_size = 32
 resnet = iv.load_resnet()
 for epoch_rate in range(10000):
