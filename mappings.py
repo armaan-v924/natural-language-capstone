@@ -1,6 +1,5 @@
 import json
 import numpy as np
-import text_embedding
 from gensim.models.keyedvectors import KeyedVectors
 
 class Mappings:
@@ -109,6 +108,7 @@ class Mappings:
         return caption_dict["caption"] if caption_dict is not None else 'None'
 
     def get_capID_vector(self, captionID, glove):
+        import text_embedding
         """Returns unit vector given caption ID
 
         Parameters:
