@@ -21,7 +21,7 @@ plot_rate = 100
 map = Mappings()
 batch_size = 32
 resnet = iv.load_resnet()
-train_data, test_data = nn.sample_data(resnet)
+train_data, test_data = nn.sample_data(map, resnet)
 for epoch_rate in range(10000):
     idxs = np.arange(len(train_data))
     np.random.shuffle(idxs)
