@@ -19,7 +19,7 @@ def text_embed(text, glove, all_captions, all_captions_tokens, idfs):
     """
 
     #remove punctuation, all lowercase, split by space
-    text = get_words(text)
+    tokens = get_words(text)
     
     #generate Glove-50 embeddings for all words in text, shape: (len(tokens), 50)
     embedded_text = np.zeros((len(tokens), 50))
@@ -36,15 +36,11 @@ def text_embed(text, glove, all_captions, all_captions_tokens, idfs):
     return embedded_text
 
 def get_all_captions_tokens(all_captions):
-    #join all captions, lowercase, no punctuation, split by space
-    all_captions_tokens = " "
-    all_captions_tokens = all_captions_tokens.join(all_captions)
-    all_captions_tokens = all_captions_tokens.lower()
-    for p in string.punctuation:
-        all_captions_tokens = all_captions_tokens.replace(p, "")
-    all_captions_tokens = word_tokenize(all_captions_tokens)
+    all_tokens = []
+    for caption in all_captions:
+        all_tokens.append(get_words(caption))
 
-    return all_captions_tokens
+    return all_tokens
 
 from collections import Counter
 from typing import Dict, List, Iterable
