@@ -108,7 +108,7 @@ class Mappings:
         caption_dict = next((dic for i, dic in enumerate(self.data["annotations"]) if self.data["annotations"][i]["id"] == captionID), None)
         return caption_dict["caption"] if caption_dict is not None else 'None'
 
-    def get_capID_vector(self, captionID, glove_path = r"./dat/glove.6B.50d.txt.w2v"):
+    def get_capID_vector(self, captionID, glove):
         """Returns unit vector given caption ID
 
         Parameters:
@@ -122,6 +122,4 @@ class Mappings:
         unit_vector: np.array(50,)
         """
         caption = self.get_caption_capID(captionID)
-        return text_embedding.text_embed(caption, KeyedVectors.load_word2vec_format(glove_path, binary=False))
-
-        
+        return text_embedding.text_embed(caption, glove)       
