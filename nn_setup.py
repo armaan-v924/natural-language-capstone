@@ -72,7 +72,7 @@ def sample_data(full_dataset, resnet, glove):
     Each np.ndarray is shape (num_datapoints, 3) where the 3 columns are good image IDs,
     good caption IDs, bad image IDs
     '''
-    all_cap = full_dataset.captions
+    all_cap = full_dataset.captionID
     all_bad = np.array([])
     all_img = np.array([])
     total_cap = len(all_cap)   
