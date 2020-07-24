@@ -98,7 +98,7 @@ def sample_data(full_dataset):
             worst = np.append(worst, bad_img[diff.index(max(diff))])
 
         all_bad = np.append(all_bad, worst)
-        all_img = np.append(all_img, good_img)
+        all_img = np.append(all_img, good_img_id)
      
     all_cap = np.repeat(all_cap, 10)
     all_img = np.repeat(all_img, 10)
