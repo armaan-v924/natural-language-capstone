@@ -5,7 +5,7 @@ import numpy as np
 from mappings import Mappings
 from collections import Counter
 
-def text_embed(text, glove):
+def text_embed(text, glove, mappings):
     """
     generates embedding for the text
     
@@ -26,7 +26,6 @@ def text_embed(text, glove):
     
     #for IDFs - set up counter for words across all documents
     
-    mappings = Mappings()
     all_captions = mappings.captions
     N = len(all_captions)
     
