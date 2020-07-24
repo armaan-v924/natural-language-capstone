@@ -41,8 +41,8 @@ def add_image(image_id):
     profile: Profile of the person to add
     
     """
-    database = load_db("database.p")
+    database = load_db()
     image_vector = iv.get_resnet_vector(image_id)
     semantic_embeddings = get_embeddings(image_id) #after training
     database[tuple(image_vector)] = (image_id, semantic_embeddings)
-    save_db(database, "database.p")
+    save_db(database)
