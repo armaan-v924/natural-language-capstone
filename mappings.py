@@ -131,6 +131,6 @@ class Mappings:
         return text_embedding.text_embed(caption, glove)       
 
 
-# Testing
-dataset = Mappings()
-print(dataset.capID2img)
+# # Testing
+# dataset = Mappings()
+# print(dataset.capID2img)
