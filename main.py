@@ -1,6 +1,7 @@
 import database_functions
 import text_embedding
 import findImages
+import KeyedVectors
 
 #load glove-50 --> will need to change path
 #if you need to access glove, you should do it from here so it only has to load once
