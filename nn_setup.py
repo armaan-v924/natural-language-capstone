@@ -57,6 +57,7 @@ class Model():
 
 
 def sample_data(full_dataset, resnet, glove, text_embeds):
+    ##### DOES NOT WORK
     '''Creates training set and testing set given the full class of data/Mappings
             
     Parameters
@@ -72,21 +73,25 @@ def sample_data(full_dataset, resnet, glove, text_embeds):
     Each np.ndarray is shape (num_datapoints, 3) where the 3 columns are good image IDs,
     good caption IDs, bad image IDs
     '''
-    all_cap = full_dataset.captionID
+    all_cap = np.array(full_dataset.captionID)
     all_bad = np.array([])
     all_img = np.array([])
     total_cap = len(all_cap)   
 
     to_rem = [] 
-    for i in range(0, total_cap):
+    for i in range(0, 1):
         good_img_id = full_dataset.capID2img[all_cap[i]]
-        print("g"+str(good_img_id))
+        print(i)
         if isinstance(iv.get_resnet_vector(good_img_id, resnet), np.ndarray):
             good_w = text_embeds[all_cap[i]]
 
             possible = np.random.randint(0, total_cap, size=(25,))
-
-            bad_img = np.array([])
+            possible = all_cap[possible]
+            
+            dictionary = full_dataset.capID2img
+            print(type(dictionary))
+            bad_img = list(map(dictionary.get, possible))
+            #bad_img = np.array([])
             diff = []
             for p in possible:
                 bad_img_id = full_dataset.capID2img[all_cap[p]]
