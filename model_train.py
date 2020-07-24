@@ -39,8 +39,7 @@ for k in range(1000):
     optim.step()
     loss.null_gradients()
     
-
-
+model.save_model("trained_parameters.npz")
 
 
 
