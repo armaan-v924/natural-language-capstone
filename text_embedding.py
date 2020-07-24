@@ -5,7 +5,7 @@ import numpy as np
 from mappings import Mappings
 from collections import Counter
 
-def text_embed(text, glove, all_captions, all_captions_tokens):
+def text_embed(text, glove, all_captions, all_captions_tokens, idfs):
     """
     generates embedding for the text
     
@@ -34,7 +34,7 @@ def text_embed(text, glove, all_captions, all_captions_tokens):
     embedded_text = np.zeros((len(tokens), 50))
     for word_idx in range(len(tokens)):
         nt = c[tokens[word_idx]] #num times word appears across all documents
-        idf = np.log10(N / nt)
+        idf = idfs[tokens[word_idx]]
         try:
             embedded_text[word_idx] = idf * glove[tokens[word_idx]]
         except KeyError:
@@ -56,6 +56,46 @@ def get_all_captions_tokens(all_captions):
     all_captions_tokens = word_tokenize(all_captions_tokens)
 
     return all_captions_tokens
+
+from collections import Counter
+from typing import Dict, List, Iterable
+
+def _compute_doc_freq(documents: Iterable[str]) -> Counter:
+    """ Computes document frequency (the "DF" in "TF-IDF").
+        
+        Parameters
+        ----------
+        documents : List(str)
+        The list of documents.
+        
+        Returns
+        -------
+        collections.Counter[str, int]
+        The dictionary's keys are words and its values are number of documents the word appeared in.
+        """
+    
+    df = Counter()
+    for doc in documents:
+        df.update(set(get_words(doc)))
+    
+    return df
+
+
+def inverse_document_frequency(documents: Iterable[str]) -> Dict[str, int]:
+    """ Computes the inverse document frequency document frequency (the "DF" in "TF-IDF").
+        
+        Parameters
+        ----------
+        documents : List(str)
+        The list of documents.
+        
+        Returns
+        -------
+        collections.Counter[str, int]
+        The dictionary's keys are words and its values are number of documents the word appeared in.
+        """
+    df = _compute_doc_freq(documents)
+    return {word: np.log(len(documents) / (1.0 + count)) for word, count in df.items()}
 
 """
 Run this once to load the glove 50 set *also will need to change path later*, pass into text_embed to use
