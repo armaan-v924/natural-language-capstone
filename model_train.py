@@ -19,10 +19,11 @@ optim = SGD(model.parameters, learning_rate=0.001)
 
 plot_rate = 100
 map = Mappings()
+idfs = te.inverse_document_frequency(map.captions)
 caption_tokens = te.get_all_captions_tokens(map.captions)
 text_embeds = {}
 for cap_id, cap in zip(map.captionID, map.captions):
-    text_embeds[cap_id] = te.text_embed(cap, glove, map.captions, caption_tokens)
+    text_embeds[cap_id] = te.text_embed(cap, glove, map.captions, caption_tokens, idfs)
 
 batch_size = 32
 resnet = iv.load_resnet()

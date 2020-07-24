@@ -4,6 +4,7 @@ from gensim.models.keyedvectors import KeyedVectors
 import numpy as np
 from mappings import Mappings
 from collections import Counter
+import re
 
 def text_embed(text, glove, all_captions, all_captions_tokens, idfs):
     """
@@ -59,6 +60,23 @@ def get_all_captions_tokens(all_captions):
 
 from collections import Counter
 from typing import Dict, List, Iterable
+
+def get_words(text: str) -> List[str]:
+    """ Returns all the words in a string, removing punctuation.
+
+    Parameters
+    ----------
+    text : str
+        The text whose words to return.
+
+    Returns
+    -------
+    List[str]
+        The words in `text`, with no punctuation.
+    """
+    _PUNC_REGEX = re.compile("[{}]".format(re.escape(string.punctuation)))
+
+    return _PUNC_REGEX.sub(" ", text.lower()).split()
 
 def _compute_doc_freq(documents: Iterable[str]) -> Counter:
     """ Computes document frequency (the "DF" in "TF-IDF").
