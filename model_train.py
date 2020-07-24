@@ -20,9 +20,14 @@ optim = SGD(model.parameters, learning_rate=0.001)
 plot_rate = 100
 map = Mappings()
 caption_tokens = te.get_all_captions_tokens(map.captions)
+text_embeds = {}
+for cap_id, cap in zip(map.captionID, map.captions):
+    text_embeds[cap_id] = te.text_embed(cap, glove, map.captions, caption_tokens)
+
 batch_size = 32
 resnet = iv.load_resnet()
-train_data, test_data = nn.sample_data(map, resnet, glove, caption_tokens)
+
+train_data, test_data = nn.sample_data(map, resnet, glove, text_embeds)
 for epoch_rate in range(10000):
     idxs = np.arange(len(train_data))
     np.random.shuffle(idxs)
@@ -35,7 +40,7 @@ for epoch_rate in range(10000):
         for x in batch:
             dgoodtemp = iv.get_resnet_vector(x[0],resnet)
             dbadtemp = iv.get_resnet_vector(x[2],resnet)
-            wcaptiontemp = te.text_embed(x[1],glove, map.captions, caption_tokens)
+            wcaptiontemp = text_embeds[x[1]]
 
             dgood.append(dgoodtemp)
             dbad.append(dbadtemp)
