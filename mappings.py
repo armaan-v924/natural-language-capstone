@@ -114,8 +114,7 @@ class Mappings:
         Parameters:
         -----------
         captionID: int
-        glove_path (Optional): str
-                               Default: ./dat/glove.6B.50d.txt.w2v
+        glove_path: loaded glove file
 
         Returns: 
         --------
