@@ -38,7 +38,7 @@ def text_embed(text, glove, all_captions, all_captions_tokens):
         try:
             embedded_text[word_idx] = idf * glove[tokens[word_idx]]
         except KeyError:
-            embedded_text = np.zeros(len(tokens), 50)
+            embedded_text = np.zeros((len(tokens), 50))
             break
     
     #sum embeddings across all words in the text, shape: (50,)
