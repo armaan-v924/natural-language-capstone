@@ -128,7 +128,7 @@ class Mappings:
         unit_vector: np.array(50,)
         """
         caption = self.id2caption[captionID]
-        return text_embedding.text_embed(caption, glove)       
+        return text_embedding.text_embed(caption, glove, self.captions)       
 
 
 # # Testing
