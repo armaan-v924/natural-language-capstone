@@ -79,27 +79,26 @@ def sample_data(full_dataset, resnet, glove, text_embeds):
 
     to_rem = [] 
     for i in range(0, total_cap):
-        worst = np.array([])
         good_img_id = full_dataset.capID2img[all_cap[i]]
+        print("g"+str(good_img_id))
         if isinstance(iv.get_resnet_vector(good_img_id, resnet), np.ndarray):
             good_w = text_embeds[all_cap[i]]
 
-            for j in range(10):
-                possible = np.random.randint(0, total_cap, size=(25,))
+            possible = np.random.randint(0, total_cap, size=(25,))
 
-                bad_img = np.array([])
-                diff = []
-                for p in possible:
-                    bad_img_id = full_dataset.capID2img[all_cap[p]]
-                    bad_img = np.append(bad_img, bad_img_id)
-                    if isinstance(iv.get_resnet_vector(bad_img_id, resnet), np.ndarray) and bad_img_id != good_img_id:
-                            bad_w = text_embeds[all_cap[p]]
-                            diff.append(np.dot(bad_w, good_w))
-                    else:
-                        diff.append(0)
-                    
-                worst = np.append(worst, bad_img[diff.index(max(diff))])
-            all_bad = np.append(all_bad, worst)
+            bad_img = np.array([])
+            diff = []
+            for p in possible:
+                bad_img_id = full_dataset.capID2img[all_cap[p]]
+                bad_img = np.append(bad_img, bad_img_id)
+                if isinstance(iv.get_resnet_vector(bad_img_id, resnet), np.ndarray) and bad_img_id != good_img_id:
+                        bad_w = text_embeds[all_cap[p]]
+                        diff.append(np.dot(bad_w, good_w))
+                else:
+                    diff.append(0)
+                
+            diff = np.argsort(diff)[-10:]
+            all_bad = np.append(all_bad, bad_img[diff])
             all_img = np.append(all_img, good_img_id)
 
         else:
