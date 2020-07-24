@@ -36,10 +36,9 @@ for epoch_rate in range(10000):
             dbadtemp = iv.get_resnet_vector(x[2],resnet)
             wcaptiontemp = te.text_embed(x[1],glove)
 
-            if dgoodtemp != 0 and dbadtemp != 0:
-                dgood.append(dgoodtemp)
-                dbad.append(dbadtemp)
-                wcaption.append(dgoodtemp)
+            dgood.append(dgoodtemp)
+            dbad.append(dbadtemp)
+            wcaption.append(dgoodtemp)
 
         wcaption = np.array(wcaption)
         wgood = model(np.array(dgood))
@@ -64,11 +63,9 @@ for epoch_rate in range(10000):
             dgoodtemp = iv.get_resnet_vector(x[0],resnet)
             dbadtemp = iv.get_resnet_vector(x[2],resnet)
             wcaptiontemp = te.text_embed(x[1],glove)
-
-            if dgoodtemp != 0 and dbadtemp != 0:
-                dgood.append(dgoodtemp)
-                dbad.append(dbadtemp)
-                wcaption.append(dgoodtemp)
+            dgood.append(dgoodtemp)
+            dbad.append(dbadtemp)
+            wcaption.append(dgoodtemp)
 
         wcaption = np.array(wcaption)
         wgood = model(np.array(dgood))
