@@ -1,6 +1,7 @@
 import pickle
 # import trained model
 import image_vector as iv
+import numpy as np
 
 def load_db():
     """

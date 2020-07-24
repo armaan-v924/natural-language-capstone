@@ -1,7 +1,7 @@
 import database_functions
 import text_embedding
 import findImages
-from gensim.models.keyedvectors import KeyedVectors
+from gensim.models.keyedvectors import KeyedVector
 
 #load glove-50 --> will need to change path
 #if you need to access glove, you should do it from here so it only has to load once
@@ -17,6 +17,7 @@ database = database_functions.load_db()
 
 #find top k scores (for n images to display) and their images
 k = 4
+load_model("train_parameters.npc")
 image_ids = findImages.find_topk_images(k, embedded_caption, database)
 
 #display images
