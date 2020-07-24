@@ -5,7 +5,7 @@ import numpy as np
 from mappings import Mappings
 from collections import Counter
 
-def text_embed(text, glove, all_captions):
+def text_embed(text, glove, all_captions, all_captions_tokens):
     """
     generates embedding for the text
     
@@ -27,14 +27,6 @@ def text_embed(text, glove, all_captions):
     #for IDFs - set up counter for words across all documents
     N = len(all_captions)
     
-    #join all captions, lowercase, no punctuation, split by space
-    all_captions_tokens = " "
-    all_captions_tokens = all_captions_tokens.join(all_captions)
-    all_captions_tokens = all_captions_tokens.lower()
-    for p in string.punctuation:
-        all_captions_tokens = all_captions_tokens.replace(p, "")
-    all_captions_tokens = word_tokenize(all_captions_tokens)
-    
     #set up counter
     c = Counter(all_captions_tokens)
     
@@ -50,6 +42,16 @@ def text_embed(text, glove, all_captions):
     
     return embedded_text
 
+def get_all_captions_tokens(all_captions):
+    #join all captions, lowercase, no punctuation, split by space
+    all_captions_tokens = " "
+    all_captions_tokens = all_captions_tokens.join(all_captions)
+    all_captions_tokens = all_captions_tokens.lower()
+    for p in string.punctuation:
+        all_captions_tokens = all_captions_tokens.replace(p, "")
+    all_captions_tokens = word_tokenize(all_captions_tokens)
+
+    return all_captions_tokens
 
 """
 Run this once to load the glove 50 set *also will need to change path later*, pass into text_embed to use
