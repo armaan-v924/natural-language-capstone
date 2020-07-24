@@ -8,6 +8,10 @@ import loss_and_acc_function as la
 import text_embedding as te
 import image_vector as iv
 import nn_setup as nn
+from gensim.models.keyedvectors import KeyedVectors
+
+path = r"./glove.6B.50d.txt.w2v"
+glove = KeyedVectors.load_word2vec_format(path, binary=False)
 
 plotter,fig,ax = create_plot(metrics=["loss","accuracy"])
 model = nn.Model(512,50) 
