@@ -3,11 +3,6 @@ import matplotlib.pyplot as plt
 from mappings import Mappings
 import numpy as np
 
-import urllib.request as req
-
-with open("captions_train2014.json") as f:
-    coco_data = json.load(f)
-#print(coco_data)
 
 def cos_distance(d1, d2):
     '''
