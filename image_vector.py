@@ -40,6 +40,7 @@ def get_resnet_vector(image_id, resnet=None):
     if resnet is None:
         resnet = load_resnet()
 
-    if image_id not in resnet:
+    try:
+        return resnet[image_id].flatten()
+    except KeyError:
         return 0
-    return resnet[image_id].flatten()
