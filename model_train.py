@@ -32,12 +32,12 @@ resnet = iv.load_resnet()
 train_data, test_data = nn.sample_data(map, resnet, glove, text_embeds)
 pickle.dump((train_data,test_data), open( "train_test_data.p", "wb" ) )
 
+print(len(train_data), len(test_data))
 for epoch_rate in range(5):
     print(epoch_rate)
     idxs = np.arange(len(train_data))
     np.random.shuffle(idxs)
     for batch_rate in range(len(train_data) // batch_size):
-        # print(batch_rate,len(train_data)//batch_size)
         batch_indices = idxs[batch_rate * batch_size:(batch_rate + 1) * batch_size]
         batch = train_data[batch_indices]
         dgood = []
@@ -54,15 +54,18 @@ for epoch_rate in range(5):
         wcaption = np.array(wcaption)
         wgood = model(np.array(dgood))
         wbad = model(np.array(dbad))
-        sgood = np.squeeze(np.expand_dims(wcaption, axis=1) @ np.expand_dims(wgood, axis=2)).astype(float)
-        sbad = np.squeeze(np.expand_dims(wcaption, axis=1) @ np.expand_dims(wbad, axis=2)).astype(float)
+        sgood = (wcaption[:, np.newaxis] @ wgood[:, :, np.newaxis])
+        sbad = (wcaption[:, np.newaxis] @ wbad[:, :, np.newaxis])
+        sgood = mg.squeeze(sgood)
+        sbad = mg.squeeze(sbad)
         loss = la.loss(sgood, sbad)
         accuracy = la.acc(sgood, sbad)
         loss.backward()
         optim.step()
         loss.null_gradients()
 
-        plotter.set_train_batch({"loss": loss.item(), "accuracy": accuracy}, batch_size=batch_size)
+        if batch_rate % 100 == 0:
+            plotter.set_train_batch({"loss": loss.item(), "accuracy": accuracy}, batch_size=batch_size)
 
     if epoch_rate % plot_rate == 0 and epoch_rate > 0:
         plotter.set_train_epoch()
