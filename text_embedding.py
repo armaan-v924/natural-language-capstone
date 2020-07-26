@@ -1,7 +1,6 @@
 import string
 from gensim.models.keyedvectors import KeyedVectors
 import numpy as np
-from mappings import Mappings
 from collections import Counter
 import re
 
