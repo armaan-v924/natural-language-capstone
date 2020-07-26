@@ -3,6 +3,7 @@ import pickle
 import image_vector as iv
 import numpy as np
 from nn_setup import Model
+import time
 
 def load_db():
     """
@@ -53,24 +54,22 @@ def add_images(image_ids, param_path):
     model = Model(512,50)
     model.load_model(param_path)
     database = load_db()
-
+    resnet = iv.load_resnet()
     keys = []
-    ivs = np.array([])
-    rem = []
+    ivs = []
+    new_ids = []
     for i in range(len(image_ids)):
-        res = iv.get_resnet_vector(image_ids[i])
-        if res!=0:
+        print(i)
+        res = iv.get_resnet_vector(image_ids[i],resnet = resnet)
+        if type(res) is np.ndarray:
             keys.append(tuple(res))
-            ivs = np.append(ivs, res)
-        else:
-            rem.append(i)
-    
-    for r in rem:
-        del image_ids[i]
-        
+            ivs.append(res)
+            new_ids.append(image_ids[i])
+    ivs = np.array(ivs)
+    new_ids = np.array(new_ids)
     semantic_embeddings = model(ivs).data
 
-    val = list(zip(image_ids, semantic_embeddings))
+    val = list(zip(new_ids, semantic_embeddings))
     add = dict(tuple(zip(keys, val)))
     database.update(add)
     save_db(database)

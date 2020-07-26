@@ -55,7 +55,7 @@ def display_images(image_ids):
     maps = Mappings()
     fig, ax = plt.subplot(len(image_ids),1)
     for i in range(len(image_ids)):
-        img_url = maps.imgUrl[image_ids[i]]
+        img_url = maps.imgURL[image_ids[i]]
         a = plt.imread(img_url)
         ax[i].imshow(a)
     ax.show()

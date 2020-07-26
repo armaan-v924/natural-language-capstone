@@ -3,18 +3,19 @@ import text_embedding
 import findImages
 from gensim.models.keyedvectors import KeyedVectors
 from mappings import Mappings
+import pickle
 
 #load glove-50 --> will need to change path
 #if you need to access glove, you should do it from here so it only has to load once
-path = r"./glove.6B.50d.txt.w2v"
-glove = KeyedVectors.load_word2vec_format(path, binary=False)
 
+glove = pickle.load(open( "glove_data.p", "rb" ))
 print("Developed by @therealshazam\n")
 print("What would you like to do?")
+
 function = input("1. Update the database\n2. Find an image via caption\n")
 if function == '1':
     mapping = Mappings()
-    ids = mapping.captions()
+    ids = mapping.captionID
     database_functions.add_images(ids, "trained_parameters.npz")
 elif function == '2':
     #ask for image caption and embed
